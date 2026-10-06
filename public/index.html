@@ -2268,33 +2268,45 @@
           const f = new FormData(e.target),
             button = e.target.querySelector(".btn-primary");
           button.disabled = true;
-          try {
-            const name = String(f.get("name")).trim();
-            if (!name) throw Error("Enter an account name.");
-            if (
-              state.accounts.some(
-                (x) =>
-                  x.id !== id && x.name.toLowerCase() === name.toLowerCase(),
-              )
-            )
-              throw Error("An account with this name already exists.");
-            await db.put("accounts", {
-              id: id || uid(),
-              name,
-              type: String(f.get("type")),
-              opening: parseAmount(f.get("opening"), { signed: true }),
-              createdAt: id ? a.createdAt : Date.now(),
-              updatedAt: Date.now(),
-            });
-            closeModal();
-            await refresh();
-            toast(id ? "Account updated." : "Account created.");
-          } catch (err) {
-            showError(err.message);
-            button.disabled = false;
-          }
-        };
-      }
+try {
+  const name = String(f.get("name")).trim();
+
+  if (!name) throw Error("Enter an account name.");
+
+  if (
+    state.accounts.some(
+      (x) =>
+        x.id !== id &&
+        x.name.toLowerCase() === name.toLowerCase(),
+    )
+  ) {
+    throw Error("An account with this name already exists.");
+  }
+
+  const record = {
+    id: id || uid(),
+    name,
+    type: String(f.get("type")),
+    opening: parseAmount(f.get("opening"), { signed: true }),
+    createdAt: id ? a.createdAt : Date.now(),
+    updatedAt: Date.now(),
+  };
+
+  if (id) {
+    await db.put("accounts", record);
+  } else {
+    await db.add("accounts", record);
+  }
+
+  closeModal();
+  await refresh();
+  toast(id ? "Account updated." : "Account created.");
+} catch (err) {
+  showError(err.message);
+  button.disabled = false;
+}
+};
+}
       function categoryModal(name) {
         openModal(
           name ? "Rename category" : "Create category",

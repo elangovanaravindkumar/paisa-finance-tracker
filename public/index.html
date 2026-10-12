@@ -717,6 +717,17 @@
         font-weight: 400;
         color: var(--muted);
       }
+      .check {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        font-weight: 700;
+      }
+      .check input {
+        width: 18px;
+        height: 18px;
+        accent-color: var(--forest);
+      }
       .toolbar .field {
         min-width: 145px;
       }
@@ -935,6 +946,108 @@
         display: block;
         font-size: 27px;
         margin-top: 8px;
+      }
+      .planning-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 20px;
+      }
+      .plan-tabs {
+        display: flex;
+        gap: 6px;
+        padding: 5px;
+        border: 1px solid var(--line);
+        background: #fff;
+        border-radius: 13px;
+        overflow-x: auto;
+      }
+      .plan-tabs button {
+        border: 0;
+        background: transparent;
+        color: var(--muted);
+        border-radius: 9px;
+        padding: 9px 14px;
+        white-space: nowrap;
+        font-weight: 700;
+      }
+      .plan-tabs button.active {
+        background: #eaf3e5;
+        color: var(--forest);
+      }
+      .plan-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+      }
+      .plan-card {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 17px;
+        padding: 20px;
+        box-shadow: var(--shadow);
+      }
+      .plan-card-head,
+      .plan-card footer,
+      .inline-actions {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      .plan-card-head span,
+      .plan-card p,
+      .plan-card footer {
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .plan-card h3 {
+        margin-top: 3px;
+        font-size: 17px;
+      }
+      .plan-card > p {
+        margin: 14px 0 11px;
+      }
+      .plan-card footer {
+        margin-top: 12px;
+      }
+      .plan-card footer strong {
+        color: var(--ink);
+      }
+      .plan-amount {
+        display: block;
+        font-size: 28px;
+        margin-top: 18px;
+      }
+      .progress {
+        height: 8px;
+        border-radius: 99px;
+        background: #eaf0ec;
+        overflow: hidden;
+      }
+      .progress i {
+        display: block;
+        height: 100%;
+        background: linear-gradient(90deg, var(--green), #94bd67);
+        border-radius: inherit;
+      }
+      .qr-setup {
+        display: grid;
+        justify-items: center;
+        gap: 12px;
+      }
+      .qr-setup img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 12px;
+        border: 1px solid var(--line);
+      }
+      .qr-setup code {
+        display: block;
+        margin-top: 7px;
+        font-size: 15px;
+        word-break: break-all;
       }
       .settings-grid {
         display: grid;
@@ -1177,6 +1290,9 @@
         .account-grid {
           grid-template-columns: repeat(2, 1fr);
         }
+        .plan-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
       }
       @media (max-width: 760px) {
         body {
@@ -1204,7 +1320,7 @@
         }
         .nav {
           display: grid;
-          grid-template-columns: repeat(5, 1fr);
+          grid-template-columns: repeat(6, 1fr);
           gap: 1px;
         }
         .nav button {
@@ -1293,6 +1409,19 @@
         }
         .account-grid {
           grid-template-columns: 1fr;
+        }
+        .plan-grid {
+          grid-template-columns: 1fr;
+        }
+        .planning-head {
+          align-items: stretch;
+          flex-direction: column;
+        }
+        .plan-tabs {
+          width: 100%;
+        }
+        .plan-tabs button {
+          flex: 1;
         }
         .report-cards {
           grid-template-columns: 1fr;
@@ -1402,24 +1531,13 @@
         <div class="brand"><span class="brand-mark">₹</span>paisa<b>.</b></div>
         <span class="nav-label">YOUR MONEY</span>
         <nav class="nav" id="nav"></nav>
-        <div class="side-foot">
-          <div class="privacy">
-            ⌁
-            <div>
-              <strong>Stored securely online</strong
-              ><span>Available across your devices.</span>
-            </div>
-          </div>
-        </div>
+        <div class="side-foot"></div>
       </aside>
       <main class="main">
         <header class="topbar">
           <div class="topbar-left">
             <span>My workspace</span><span>›</span
             ><strong id="crumb">Dashboard</strong>
-          </div>
-          <div class="local-pill">
-            <i></i><span>Online · cloud database</span>
           </div>
         </header>
         <div class="content">
@@ -1434,16 +1552,6 @@
             </button>
           </div>
           <div id="view"></div>
-          <footer
-            style="
-              text-align: center;
-              color: #9aa69f;
-              font-size: 11px;
-              margin-top: 34px;
-            "
-          >
-            paisa. · Private workspace · Cloud-synced data
-          </footer>
         </div>
       </main>
     </div>
@@ -1495,6 +1603,8 @@
           '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 7h14l-3-3m3 3-3 3M17 17H3l3 3m-3-3 3-3"/></svg>',
         accounts:
           '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 10h18m-5 4h2"/></svg>',
+        planning:
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V8a2 2 0 012-2h12a2 2 0 012 2v11"/><path d="M8 6V3m8 3V3M3 11h18M8 15h3m2 0h3"/></svg>',
         reports:
           '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V9m6 10V5m6 14v-7m4 7H2"/></svg>',
         settings:
@@ -1506,6 +1616,7 @@
         ["dashboard", "Dashboard"],
         ["transactions", "Transactions"],
         ["accounts", "Accounts"],
+        ["planning", "Planning"],
         ["reports", "Reports"],
         ["settings", "Settings"],
       ];
@@ -1546,7 +1657,14 @@
         accounts: [],
         transactions: [],
         categories: [],
+        budgets: [],
+        recurring: [],
+        goals: [],
+        loans: [],
+        planTab: "budgets",
         balanceVisible: false,
+        dashboardMonthChosen: false,
+        reportRangeChosen: false,
         importRows: [],
         importHeaders: [],
         importFileName: "",
@@ -1613,6 +1731,17 @@
           );
         return n;
       }
+      function parseNonnegativeAmount(v) {
+        const s = String(v).trim();
+        if (!/^\d+(\.\d{1,2})?$/.test(s)) {
+          throw Error("Enter a valid amount with up to two decimal places.");
+        }
+        const amount = Math.round(Number(s) * 100);
+        if (!Number.isSafeInteger(amount) || amount > 1e12) {
+          throw Error("Enter an amount below ₹10 billion.");
+        }
+        return amount;
+      }
       function validDate(s) {
         const d = new Date(s + "T00:00:00Z");
         return (
@@ -1661,20 +1790,115 @@
       }
       function requestAuthentication(message = "", mode = "login") {
         return new Promise((resolve) => {
+          const finish = (result) => {
+            state.user = result.user;
+            state.authRequired = false;
+            $(".close-btn").hidden = false;
+            closeModal();
+            resolve(result.user);
+          };
+          const renderVerification = (result, selectedMode, errorMessage = "") => {
+            const authenticator = result.factor === "totp";
+            openModal(
+              authenticator ? "Authenticator verification" : "Check your email",
+              authenticator
+                ? "Enter the current six-digit code or one unused recovery code."
+                : `Enter the six-digit code sent to ${result.email || "your email"}.`,
+              `<form class="modal-form" id="verify-form"><label class="field">Verification code<input name="code" required autocomplete="one-time-code" inputmode="${authenticator ? "text" : "numeric"}" maxlength="11" placeholder="${authenticator ? "123456 or recovery code" : "123456"}"></label><div class="form-error ${errorMessage ? "show" : ""}">${esc(errorMessage)}</div><div class="modal-foot"><button type="button" class="btn btn-outline" id="restart-auth">Back</button><button class="btn btn-primary">Verify</button></div></form>`,
+            );
+            $(".close-btn").hidden = true;
+            $("#restart-auth").onclick = () => renderAuth(selectedMode);
+            $("#verify-form").onsubmit = async (event) => {
+              event.preventDefault();
+              const button = event.target.querySelector(".btn-primary");
+              button.disabled = true;
+              try {
+                const verified = await db.auth(
+                  selectedMode === "register"
+                    ? "verify_registration"
+                    : "verify_login",
+                  {
+                    challenge: result.challenge,
+                    factor: result.factor,
+                    code: String(new FormData(event.target).get("code") || "").trim(),
+                  },
+                );
+                finish(verified);
+              } catch (error) {
+                renderVerification(result, selectedMode, error.message);
+              }
+            };
+          };
+          const renderResetConfirm = (started, errorMessage = "") => {
+            openModal(
+              "Reset your password",
+              `Enter the code sent to ${started.email} and choose a new password.`,
+              `<form class="modal-form" id="reset-confirm-form"><label class="field">Six-digit code<input name="code" required inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" placeholder="123456"></label><label class="field">New password<input name="newPassword" type="password" required minlength="10" maxlength="128" autocomplete="new-password" placeholder="At least 10 characters"></label><label class="field">Confirm new password<input name="confirmPassword" type="password" required minlength="10" maxlength="128" autocomplete="new-password"></label><div class="form-error ${errorMessage ? "show" : ""}">${esc(errorMessage)}</div><div class="modal-foot"><button type="button" class="btn btn-outline" id="reset-back">Back</button><button class="btn btn-primary">Reset password</button></div></form>`,
+            );
+            $(".close-btn").hidden = true;
+            $("#reset-back").onclick = () => renderReset();
+            $("#reset-confirm-form").onsubmit = async (event) => {
+              event.preventDefault();
+              const values = new FormData(event.target);
+              const newPassword = String(values.get("newPassword") || "");
+              if (newPassword !== String(values.get("confirmPassword") || "")) {
+                return renderResetConfirm(started, "Passwords do not match.");
+              }
+              const button = event.target.querySelector(".btn-primary");
+              button.disabled = true;
+              try {
+                const result = await db.auth("password_reset_confirm", {
+                  challenge: started.challenge,
+                  code: String(values.get("code") || "").trim(),
+                  newPassword,
+                });
+                finish(result);
+                toast("Password reset successfully.");
+              } catch (error) {
+                renderResetConfirm(started, error.message);
+              }
+            };
+          };
+          const renderReset = (errorMessage = "") => {
+            openModal(
+              "Forgot password?",
+              "Enter your verified email. If an account matches, a reset code will be sent.",
+              `<form class="modal-form" id="reset-form"><label class="field">Verified email<input name="email" type="email" required maxlength="254" autocomplete="email" placeholder="you@example.com"></label><div class="form-error ${errorMessage ? "show" : ""}">${esc(errorMessage)}</div><div class="modal-foot"><button type="button" class="btn btn-outline" id="reset-login">Back to login</button><button class="btn btn-primary">Send reset code</button></div></form>`,
+            );
+            $(".close-btn").hidden = true;
+            $("#reset-login").onclick = () => renderAuth("login");
+            $("#reset-form").onsubmit = async (event) => {
+              event.preventDefault();
+              const button = event.target.querySelector(".btn-primary");
+              button.disabled = true;
+              try {
+                renderResetConfirm(
+                  await db.auth("password_reset_begin", {
+                    email: String(new FormData(event.target).get("email") || ""),
+                  }),
+                );
+              } catch (error) {
+                renderReset(error.message);
+              }
+            };
+          };
           const renderAuth = (selectedMode, errorMessage = "") => {
             const registering = selectedMode === "register";
             state.authRequired = true;
             openModal(
               registering ? "Create your Paisa account" : "Welcome back",
               registering
-                ? "Your private finance workspace will be ready immediately."
-                : "Sign in to open your private finance workspace.",
-              `<form class="modal-form" id="auth-form"><div class="type-toggle"><button type="button" data-auth-mode="login" class="${registering ? "" : "active"}">Log in</button><button type="button" data-auth-mode="register" class="${registering ? "active" : ""}">Create account</button></div><label class="field">Username<input name="username" required minlength="3" maxlength="30" pattern="[A-Za-z0-9_]+" autocomplete="username" placeholder="e.g. anita_rao"></label><label class="field">Password<input name="password" type="password" required minlength="10" maxlength="128" autocomplete="${registering ? "new-password" : "current-password"}" placeholder="At least 10 characters"></label>${registering ? '<label class="field">Confirm password<input name="confirmPassword" type="password" required minlength="10" maxlength="128" autocomplete="new-password"></label>' : ""}<div class="notice">Passwords are protected with scrypt hashing. Sessions use secure, HTTP-only cookies.</div><div class="form-error ${errorMessage ? "show" : ""}">${esc(errorMessage)}</div><div class="modal-foot"><button class="btn btn-primary">${registering ? "Create account" : "Log in"}</button></div></form>`,
+                ? "Verify your email to finish creating your account."
+                : "Enter your credentials to continue.",
+              `<form class="modal-form" id="auth-form"><div class="type-toggle"><button type="button" data-auth-mode="login" class="${registering ? "" : "active"}">Log in</button><button type="button" data-auth-mode="register" class="${registering ? "active" : ""}">Create account</button></div><label class="field">Username<input name="username" required minlength="3" maxlength="30" pattern="[A-Za-z0-9_]+" autocomplete="username" placeholder="e.g. anita_rao"></label>${registering ? '<label class="field">Email<input name="email" type="email" required maxlength="254" autocomplete="email" placeholder="you@example.com"></label>' : ""}<label class="field">Password<input name="password" type="password" required minlength="10" maxlength="128" autocomplete="${registering ? "new-password" : "current-password"}" placeholder="At least 10 characters"></label>${registering ? '<label class="field">Confirm password<input name="confirmPassword" type="password" required minlength="10" maxlength="128" autocomplete="new-password"></label>' : '<button type="button" class="link-btn" id="forgot-password" style="justify-self:start">Forgot password?</button>'}<div class="notice">Passwords use salted scrypt hashing. New accounts verify their email before activation.</div><div class="form-error ${errorMessage ? "show" : ""}">${esc(errorMessage)}</div><div class="modal-foot"><button class="btn btn-primary">${registering ? "Send verification code" : "Continue"}</button></div></form>`,
             );
             $(".close-btn").hidden = true;
             $$("[data-auth-mode]").forEach((button) => {
               button.onclick = () => renderAuth(button.dataset.authMode);
             });
+            if ($("#forgot-password")) {
+              $("#forgot-password").onclick = () => renderReset();
+            }
             $("#auth-form").onsubmit = async (event) => {
               event.preventDefault();
               const form = event.target;
@@ -1691,13 +1915,14 @@
               try {
                 const result = await db.auth(selectedMode, {
                   username: String(values.get("username") || ""),
+                  email: String(values.get("email") || ""),
                   password,
                 });
-                state.user = result.user;
-                state.authRequired = false;
-                $(".close-btn").hidden = false;
-                closeModal();
-                resolve(result.user);
+                if (result.challenge) {
+                  renderVerification(result, selectedMode);
+                } else {
+                  finish(result);
+                }
               } catch (error) {
                 renderAuth(selectedMode, error.message);
               }
@@ -1816,13 +2041,49 @@
       }
       const db = new PaisaDB();
       async function refresh() {
-        [state.accounts, state.transactions, state.categories] =
-          await Promise.all(
-            ["accounts", "transactions", "categories"].map((x) => db.all(x)),
-          );
+        [
+          state.accounts,
+          state.transactions,
+          state.categories,
+          state.budgets,
+          state.recurring,
+          state.goals,
+          state.loans,
+        ] = await Promise.all(
+          [
+            "accounts",
+            "transactions",
+            "categories",
+            "budgets",
+            "recurring",
+            "goals",
+            "loans",
+          ].map((x) => db.all(x)),
+        );
         state.transactions.sort(
           (a, b) => b.date.localeCompare(a.date) || b.createdAt - a.createdAt,
         );
+        if (state.transactions.length) {
+          const latestMonth = state.transactions[0].date.slice(0, 7);
+          const selectedMonthHasData = state.transactions.some((transaction) =>
+            transaction.date.startsWith(state.month),
+          );
+          if (!state.dashboardMonthChosen && !selectedMonthHasData) {
+            state.month = latestMonth;
+          }
+          const reportHasData = state.transactions.some(
+            (transaction) =>
+              transaction.date >= state.report.from &&
+              transaction.date <= state.report.to,
+          );
+          if (!state.reportRangeChosen && !reportHasData) {
+            const [year, month] = latestMonth.split("-").map(Number);
+            state.report.from = `${latestMonth}-01`;
+            state.report.to = new Date(Date.UTC(year, month, 0))
+              .toISOString()
+              .slice(0, 10);
+          }
+        }
         render();
       }
       function nav() {
@@ -1856,6 +2117,11 @@
             "Accounts",
             "Balances update automatically from your ledger.",
           ],
+          planning: [
+            "PLAN WHAT COMES NEXT",
+            "Planning",
+            "Budgets, recurring entries, goals and loans in one place.",
+          ],
           reports: [
             "PATTERNS & PROGRESS",
             "Reports",
@@ -1864,7 +2130,7 @@
           settings: [
             "YOUR WORKSPACE",
             "Settings",
-            "Manage categories, backups and your cloud data.",
+            "Manage security, categories and backups.",
           ],
         }[state.view];
         $("#eyebrow").textContent = h[0];
@@ -2035,6 +2301,77 @@
         );
         return `<div class="panel-head" style="padding:0 0 16px"><div><h2>${state.accounts.length} ${state.accounts.length === 1 ? "account" : "accounts"} · ${money(totalBal)} total</h2><p>Opening balance plus recorded transactions</p></div><button class="btn btn-outline" data-action="add-account">＋ Add account</button></div>${state.accounts.length ? `<div class="account-grid">${state.accounts.map((a) => `<article class="account-card"><div class="account-top"><span class="account-icon">${a.type === "Credit card" ? "▣" : a.type === "Cash" ? "₹" : a.type === "Wallet" ? "◈" : "▤"}</span><button class="account-menu" data-action="edit-account" data-id="${a.id}">Edit</button></div><h3>${esc(a.name)}</h3><strong>${money(accountBalance(a))}</strong><p>Current balance · ${esc(a.type)}</p><footer><span>Opening balance</span><span>${money(a.opening)}</span></footer></article>`).join("")}</div>` : `<section class="panel">${empty("Create your first account", "Add a bank account, cash, credit card or wallet to begin.", `<button class="btn btn-primary" data-action="add-account">＋ Create account</button>`)}</section>`}<div class="notice" style="margin-top:20px">For credit cards, use a negative opening balance for money already owed. Opening balances never count as income.</div>`;
       }
+      function planning() {
+        const tabs = [
+          ["budgets", "Budgets"],
+          ["recurring", "Recurring"],
+          ["goals", "Goals"],
+          ["loans", "Loans"],
+        ];
+        const accountName = (id) =>
+          state.accounts.find((account) => account.id === id)?.name ||
+          "No linked account";
+        let content = "";
+        if (state.planTab === "budgets") {
+          content = state.budgets.length
+            ? `<div class="plan-grid">${state.budgets
+                .map((budget) => {
+                  const spent = state.transactions
+                    .filter(
+                      (transaction) =>
+                        transaction.type === "expense" &&
+                        transaction.date.startsWith(budget.month) &&
+                        (budget.category === "All categories" ||
+                          transaction.category === budget.category),
+                    )
+                    .reduce((sum, transaction) => sum + transaction.amount, 0);
+                  const percent = Math.min(
+                    100,
+                    Math.round((spent / budget.amount) * 100),
+                  );
+                  return `<article class="plan-card"><div class="plan-card-head"><div><span>${esc(budget.month)}</span><h3>${esc(budget.name)}</h3></div><div class="row-actions"><button data-action="edit-budget" data-id="${budget.id}" title="Edit">✎</button><button data-action="delete-budget" data-id="${budget.id}" title="Delete">⌫</button></div></div><p>${esc(budget.category)} · ${money(spent)} of ${money(budget.amount)}</p><div class="progress"><i style="width:${percent}%"></i></div><footer><span>${percent}% used</span><strong>${money(Math.max(0, budget.amount - spent))} left</strong></footer></article>`;
+                })
+                .join("")}</div>`
+            : empty("No budgets yet", "Set a monthly spending limit to track your progress.");
+        } else if (state.planTab === "recurring") {
+          content = state.recurring.length
+            ? `<div class="plan-grid">${state.recurring
+                .map(
+                  (item) =>
+                    `<article class="plan-card"><div class="plan-card-head"><div><span>${item.active ? "Active" : "Paused"}</span><h3>${esc(item.name)}</h3></div><div class="row-actions"><button data-action="edit-recurring" data-id="${item.id}" title="Edit">✎</button><button data-action="delete-recurring" data-id="${item.id}" title="Delete">⌫</button></div></div><strong class="plan-amount ${item.type === "income" ? "income-text" : ""}">${item.type === "income" ? "+" : "−"}${money(item.amount)}</strong><p>${esc(item.frequency)} · next ${dateLabel(item.nextDate)}</p><footer><span>${esc(accountName(item.accountId))}</span><span>${esc(item.category)}</span></footer></article>`,
+                )
+                .join("")}</div>`
+            : empty("No recurring entries", "Schedule regular income or expenses and Paisa will post them when due.");
+        } else if (state.planTab === "goals") {
+          content = state.goals.length
+            ? `<div class="plan-grid">${state.goals
+                .map((goal) => {
+                  const percent = Math.min(
+                    100,
+                    Math.round((goal.savedAmount / goal.targetAmount) * 100),
+                  );
+                  return `<article class="plan-card"><div class="plan-card-head"><div><span>${goal.targetDate ? `Target ${dateLabel(goal.targetDate)}` : "No target date"}</span><h3>${esc(goal.name)}</h3></div><div class="row-actions"><button data-action="edit-goal" data-id="${goal.id}" title="Edit">✎</button><button data-action="delete-goal" data-id="${goal.id}" title="Delete">⌫</button></div></div><p>${money(goal.savedAmount)} saved of ${money(goal.targetAmount)}</p><div class="progress"><i style="width:${percent}%"></i></div><footer><span>${percent}% complete</span><strong>${money(Math.max(0, goal.targetAmount - goal.savedAmount))} to go</strong></footer></article>`;
+                })
+                .join("")}</div>`
+            : empty("No savings goals", "Create a target and update your saved amount as you progress.");
+        } else {
+          content = state.loans.length
+            ? `<div class="plan-grid">${state.loans
+                .map(
+                  (loan) =>
+                    `<article class="plan-card"><div class="plan-card-head"><div><span>${loan.direction === "borrowed" ? "You borrowed" : "You lent"}</span><h3>${esc(loan.name)}</h3></div><div class="row-actions"><button data-action="edit-loan" data-id="${loan.id}" title="Edit">✎</button><button data-action="delete-loan" data-id="${loan.id}" title="Delete">⌫</button></div></div><strong class="plan-amount">${money(loan.outstanding)}</strong><p>Outstanding of ${money(loan.principal)} · ${(loan.interestRate / 100).toFixed(2)}% interest</p><footer><span>${loan.dueDate ? `Due ${dateLabel(loan.dueDate)}` : "No due date"}</span><span>${esc(accountName(loan.accountId))}</span></footer></article>`,
+                )
+                .join("")}</div>`
+            : empty("No loans recorded", "Track money borrowed or lent, outstanding balances and due dates.");
+        }
+        const actionLabel = {
+          budgets: "Add budget",
+          recurring: "Add recurring entry",
+          goals: "Add goal",
+          loans: "Add loan",
+        }[state.planTab];
+        return `<div class="planning-head"><div class="plan-tabs">${tabs.map(([id, label]) => `<button data-action="plan-tab" data-id="${id}" class="${state.planTab === id ? "active" : ""}">${label}</button>`).join("")}</div><button class="btn btn-primary" data-action="add-${state.planTab}">＋ ${actionLabel}</button></div>${content}`;
+      }
       function reports() {
         const { from, to } = state.report,
           invalid = !from || !to || from > to,
@@ -2062,7 +2399,7 @@
           ...DEFAULT_CATEGORIES,
           ...state.categories.map((x) => x.name),
         ];
-        return `<div class="settings-grid"><section class="panel"><div class="panel-head"><div><h2>Preferences</h2><p>Your protected online workspace</p></div></div><div class="setting-list"><div class="setting-row"><div><strong>Signed in</strong><p>This session can access only your records.</p></div><span class="badge">@${esc(state.user?.username || "user")}</span></div><div class="setting-row"><div><strong>Currency</strong><p>All values use Indian Rupees.</p></div><span class="badge">INR (₹)</span></div><div class="setting-row"><div><strong>Data location</strong><p>Stored in the protected PostgreSQL database.</p></div><span class="badge">Cloud database</span></div><div class="setting-row"><div><strong>Today</strong><p>New entries use India Standard Time.</p></div><span class="badge">${dateLabel(istToday())}</span></div></div></section><section class="panel"><div class="panel-head"><div><h2>Backup & export</h2><p>Keep a portable copy of your records</p></div></div><div class="backup-actions"><button class="btn btn-outline" data-action="backup">↓ Download complete backup</button><button class="btn btn-outline" data-action="restore">↑ Restore from backup</button><button class="btn btn-outline" data-action="export-all-csv">↓ Export all transactions as CSV</button><button class="btn btn-outline" data-action="logout">Log out</button></div></section><section class="panel"><div class="panel-head"><div><h2>Categories</h2><p>Default and custom labels</p></div><button class="btn btn-outline" data-action="add-category">＋ Add</button></div><div class="chip-list">${cats.map((c) => `<span class="chip">${esc(c)}${DEFAULT_CATEGORIES.includes(c) ? "" : `<button data-action="edit-category" data-name="${esc(c)}">✎</button><button data-action="delete-category" data-name="${esc(c)}">×</button>`}</span>`).join("")}</div></section><section class="panel danger-zone"><div class="panel-head"><div><h2>Reset cloud data</h2><p>Remove every transaction, account and custom category from your account</p></div></div><div class="backup-actions"><button class="btn btn-danger" data-action="reset">Delete my finance data</button></div></section></div>`;
+        return `<div class="settings-grid"><section class="panel"><div class="panel-head"><div><h2>Account & security</h2><p>Authentication and data protection</p></div></div><div class="setting-list"><div class="setting-row"><div><strong>Signed in</strong><p>Your current username</p></div><span class="badge">@${esc(state.user?.username || "user")}</span></div><div class="setting-row"><div><strong>Verified email</strong><p>${state.user?.email ? esc(state.user.email) : "Add an email to enable OTP sign-in."}</p></div>${state.user?.emailVerified ? '<span class="badge">Verified</span>' : '<button class="btn btn-outline" data-action="add-email">Add email</button>'}</div><div class="setting-row"><div><strong>Password</strong><p>Changing it signs out your other sessions.</p></div><button class="btn btn-outline" data-action="change-password">Change password</button></div><div class="setting-row"><div><strong>Financial data</strong><p>Financial fields use AES-256-GCM encryption.</p></div><span class="badge">Encrypted</span></div><div class="setting-row"><div><strong>Authenticator app</strong><p>Require a rotating code when signing in.</p></div>${state.user?.totpEnabled ? '<div class="inline-actions"><span class="badge">Enabled</span><button class="btn btn-outline" data-action="setup-totp">Re-enroll</button><button class="btn btn-outline" data-action="disable-totp">Disable</button></div>' : '<button class="btn btn-outline" data-action="setup-totp">Enable</button>'}</div><div class="setting-row"><div><strong>Currency</strong><p>All values use Indian Rupees.</p></div><span class="badge">INR (₹)</span></div><div class="setting-row"><div><strong>Today</strong><p>New entries use India Standard Time.</p></div><span class="badge">${dateLabel(istToday())}</span></div></div></section><section class="panel"><div class="panel-head"><div><h2>Backup & export</h2><p>Keep a portable copy of your records</p></div></div><div class="backup-actions"><button class="btn btn-outline" data-action="backup">↓ Download complete backup</button><button class="btn btn-outline" data-action="restore">↑ Restore from backup</button><button class="btn btn-outline" data-action="export-all-csv">↓ Export all transactions as CSV</button><button class="btn btn-outline" data-action="logout">Log out</button></div></section><section class="panel"><div class="panel-head"><div><h2>Categories</h2><p>Default and custom labels</p></div><button class="btn btn-outline" data-action="add-category">＋ Add</button></div><div class="chip-list">${cats.map((c) => `<span class="chip">${esc(c)}${DEFAULT_CATEGORIES.includes(c) ? "" : `<button data-action="edit-category" data-name="${esc(c)}">✎</button><button data-action="delete-category" data-name="${esc(c)}">×</button>`}</span>`).join("")}</div></section><section class="panel danger-zone"><div class="panel-head"><div><h2>Delete finance data</h2><p>Remove all financial records from your account</p></div></div><div class="backup-actions"><button class="btn btn-danger" data-action="reset">Delete my finance data</button></div></section></div>`;
       }
       function monthOptions(selected) {
         let out = "";
@@ -2081,6 +2418,7 @@
           dashboard,
           transactions,
           accounts,
+          planning,
           reports,
           settings,
         }[state.view]();
@@ -2091,6 +2429,7 @@
         if (m)
           m.onchange = (e) => {
             state.month = e.target.value;
+            state.dashboardMonthChosen = true;
             render();
           };
         const s = $("#tx-search");
@@ -2117,11 +2456,13 @@
         if (rf)
           rf.onchange = (e) => {
             state.report.from = e.target.value;
+            state.reportRangeChosen = true;
             render();
           };
         if (rt)
           rt.onchange = (e) => {
             state.report.to = e.target.value;
+            state.reportRangeChosen = true;
             render();
           };
       }
@@ -2268,45 +2609,35 @@
           const f = new FormData(e.target),
             button = e.target.querySelector(".btn-primary");
           button.disabled = true;
-try {
-  const name = String(f.get("name")).trim();
-
-  if (!name) throw Error("Enter an account name.");
-
-  if (
-    state.accounts.some(
-      (x) =>
-        x.id !== id &&
-        x.name.toLowerCase() === name.toLowerCase(),
-    )
-  ) {
-    throw Error("An account with this name already exists.");
-  }
-
-  const record = {
-    id: id || uid(),
-    name,
-    type: String(f.get("type")),
-    opening: parseAmount(f.get("opening"), { signed: true }),
-    createdAt: id ? a.createdAt : Date.now(),
-    updatedAt: Date.now(),
-  };
-
-  if (id) {
-    await db.put("accounts", record);
-  } else {
-    await db.add("accounts", record);
-  }
-
-  closeModal();
-  await refresh();
-  toast(id ? "Account updated." : "Account created.");
-} catch (err) {
-  showError(err.message);
-  button.disabled = false;
-}
-};
-}
+          try {
+            const name = String(f.get("name")).trim();
+            if (!name) throw Error("Enter an account name.");
+            if (
+              state.accounts.some(
+                (x) =>
+                  x.id !== id && x.name.toLowerCase() === name.toLowerCase(),
+              )
+            )
+              throw Error("An account with this name already exists.");
+            const record = {
+              id: id || uid(),
+              name,
+              type: String(f.get("type")),
+              opening: parseAmount(f.get("opening"), { signed: true }),
+              createdAt: id ? a.createdAt : Date.now(),
+              updatedAt: Date.now(),
+            };
+            if (id) await db.put("accounts", record);
+            else await db.add("accounts", record);
+            closeModal();
+            await refresh();
+            toast(id ? "Account updated." : "Account created.");
+          } catch (err) {
+            showError(err.message);
+            button.disabled = false;
+          }
+        };
+      }
       function categoryModal(name) {
         openModal(
           name ? "Rename category" : "Create category",
@@ -2348,6 +2679,218 @@ try {
             toast(name ? "Category renamed." : "Category created.");
           } catch (err) {
             showError(err.message);
+          }
+        };
+      }
+      function budgetModal(id) {
+        const item = state.budgets.find((row) => row.id === id) || {
+          name: "",
+          category: "All categories",
+          amount: "",
+          month: state.month,
+        };
+        const categories = [
+          "All categories",
+          ...DEFAULT_CATEGORIES,
+          ...state.categories.map((row) => row.name),
+        ];
+        openModal(
+          id ? "Edit budget" : "Add budget",
+          "Set a monthly limit for all spending or one category.",
+          `<form class="modal-form" id="budget-form"><label class="field">Budget name<input name="name" required maxlength="60" value="${esc(item.name)}" placeholder="e.g. Monthly essentials"></label><div class="form-grid"><label class="field">Month<input name="month" type="month" required value="${esc(item.month)}"></label><label class="field">Limit (₹)<input name="amount" required inputmode="decimal" value="${id ? (item.amount / 100).toFixed(2) : ""}" placeholder="0.00"></label></div><label class="field">Category<select name="category">${[...new Set(categories)].map((name) => `<option ${name === item.category ? "selected" : ""}>${esc(name)}</option>`).join("")}</select></label><div class="form-error"></div><div class="modal-foot"><button type="button" class="btn btn-outline" data-action="close-modal">Cancel</button><button class="btn btn-primary">${id ? "Save changes" : "Add budget"}</button></div></form>`,
+        );
+        $("#budget-form").onsubmit = async (event) => {
+          event.preventDefault();
+          const values = new FormData(event.target);
+          const button = event.target.querySelector(".btn-primary");
+          button.disabled = true;
+          try {
+            const record = {
+              id: id || uid(),
+              name: String(values.get("name") || "").trim(),
+              category: String(values.get("category") || "All categories"),
+              amount: parseAmount(values.get("amount")),
+              month: String(values.get("month") || ""),
+              createdAt: id ? item.createdAt : Date.now(),
+              updatedAt: Date.now(),
+            };
+            if (!/^\d{4}-(0[1-9]|1[0-2])$/.test(record.month)) {
+              throw Error("Choose a valid budget month.");
+            }
+            if (id) await db.put("budgets", record);
+            else await db.add("budgets", record);
+            closeModal();
+            await refresh();
+            toast(id ? "Budget updated." : "Budget added.");
+          } catch (error) {
+            showError(error.message);
+            button.disabled = false;
+          }
+        };
+      }
+      function recurringModal(id) {
+        if (!state.accounts.length) {
+          toast("Create an account before scheduling a transaction.", "error");
+          state.view = "accounts";
+          render();
+          return;
+        }
+        const item = state.recurring.find((row) => row.id === id) || {
+          name: "",
+          type: "expense",
+          amount: "",
+          category: "Bills",
+          accountId: state.accounts[0].id,
+          paymentType: "UPI/Cash",
+          description: "",
+          frequency: "monthly",
+          nextDate: istToday(),
+          active: true,
+        };
+        openModal(
+          id ? "Edit recurring entry" : "Add recurring entry",
+          "A transaction is created automatically whenever the next date is due.",
+          `<form class="modal-form" id="recurring-form"><label class="field">Name<input name="name" required maxlength="60" value="${esc(item.name)}" placeholder="e.g. House rent"></label><div class="type-toggle"><button type="button" data-recurring-type="expense" class="${item.type === "expense" ? "active" : ""}">Expense</button><button type="button" data-recurring-type="income" class="${item.type === "income" ? "active" : ""}">Income</button></div><input type="hidden" name="type" value="${item.type}"><div class="form-grid"><label class="field">Amount (₹)<input name="amount" required inputmode="decimal" value="${id ? (item.amount / 100).toFixed(2) : ""}" placeholder="0.00"></label><label class="field">Next date<input name="nextDate" type="date" required value="${item.nextDate}"></label></div><div class="form-grid"><label class="field">Frequency<select name="frequency">${["weekly", "monthly", "quarterly", "yearly"].map((value) => `<option ${value === item.frequency ? "selected" : ""}>${value}</option>`).join("")}</select></label><label class="field">Category<select name="category">${categoryOptions(item.type, item.category)}</select></label></div><div class="form-grid"><label class="field">Account<select name="accountId">${state.accounts.map((account) => `<option value="${account.id}" ${account.id === item.accountId ? "selected" : ""}>${esc(account.name)}</option>`).join("")}</select></label><label class="field">Payment Type<select name="paymentType">${PAYMENT_TYPES.map((value) => `<option ${value === item.paymentType ? "selected" : ""}>${value}</option>`).join("")}</select></label></div><label class="field">Description <small>Optional</small><textarea name="description" maxlength="500">${esc(item.description)}</textarea></label><label class="check"><input name="active" type="checkbox" ${item.active ? "checked" : ""}> Active schedule</label><div class="form-error"></div><div class="modal-foot"><button type="button" class="btn btn-outline" data-action="close-modal">Cancel</button><button class="btn btn-primary">${id ? "Save changes" : "Add recurring entry"}</button></div></form>`,
+        );
+        $$('[data-recurring-type]').forEach((button) => {
+          button.onclick = () => {
+            const form = $("#recurring-form");
+            form.type.value = button.dataset.recurringType;
+            $$('[data-recurring-type]').forEach((row) =>
+              row.classList.toggle("active", row === button),
+            );
+            form.category.innerHTML = categoryOptions(
+              button.dataset.recurringType,
+              button.dataset.recurringType === "income" ? "Salary" : "Bills",
+            );
+          };
+        });
+        $("#recurring-form").onsubmit = async (event) => {
+          event.preventDefault();
+          const values = new FormData(event.target);
+          const button = event.target.querySelector(".btn-primary");
+          button.disabled = true;
+          try {
+            const record = {
+              id: id || uid(),
+              name: String(values.get("name") || "").trim(),
+              type: String(values.get("type")),
+              amount: parseAmount(values.get("amount")),
+              nextDate: String(values.get("nextDate")),
+              frequency: String(values.get("frequency")),
+              category: String(values.get("category")),
+              accountId: String(values.get("accountId")),
+              paymentType: String(values.get("paymentType")),
+              description: String(values.get("description") || "").trim(),
+              active: values.get("active") === "on",
+              createdAt: id ? item.createdAt : Date.now(),
+              updatedAt: Date.now(),
+            };
+            if (!validDate(record.nextDate)) throw Error("Choose a valid next date.");
+            if (id) await db.put("recurring", record);
+            else await db.add("recurring", record);
+            closeModal();
+            await refresh();
+            toast(id ? "Recurring entry updated." : "Recurring entry added.");
+          } catch (error) {
+            showError(error.message);
+            button.disabled = false;
+          }
+        };
+      }
+      function goalModal(id) {
+        const item = state.goals.find((row) => row.id === id) || {
+          name: "",
+          targetAmount: "",
+          savedAmount: 0,
+          targetDate: "",
+          accountId: "",
+          notes: "",
+        };
+        openModal(
+          id ? "Edit savings goal" : "Add savings goal",
+          "Track a target without changing any account balance.",
+          `<form class="modal-form" id="goal-form"><label class="field">Goal name<input name="name" required maxlength="60" value="${esc(item.name)}" placeholder="e.g. Emergency fund"></label><div class="form-grid"><label class="field">Target amount (₹)<input name="targetAmount" required inputmode="decimal" value="${id ? (item.targetAmount / 100).toFixed(2) : ""}"></label><label class="field">Saved so far (₹)<input name="savedAmount" required inputmode="decimal" value="${(item.savedAmount / 100).toFixed(2)}"></label></div><div class="form-grid"><label class="field">Target date <small>Optional</small><input name="targetDate" type="date" value="${esc(item.targetDate)}"></label><label class="field">Linked account <small>Optional</small><select name="accountId"><option value="">No linked account</option>${state.accounts.map((account) => `<option value="${account.id}" ${account.id === item.accountId ? "selected" : ""}>${esc(account.name)}</option>`).join("")}</select></label></div><label class="field">Notes <small>Optional</small><textarea name="notes" maxlength="500">${esc(item.notes)}</textarea></label><div class="form-error"></div><div class="modal-foot"><button type="button" class="btn btn-outline" data-action="close-modal">Cancel</button><button class="btn btn-primary">${id ? "Save changes" : "Add goal"}</button></div></form>`,
+        );
+        $("#goal-form").onsubmit = async (event) => {
+          event.preventDefault();
+          const values = new FormData(event.target);
+          const button = event.target.querySelector(".btn-primary");
+          button.disabled = true;
+          try {
+            const savedValue = String(values.get("savedAmount") || "0");
+            const record = {
+              id: id || uid(),
+              name: String(values.get("name") || "").trim(),
+              targetAmount: parseAmount(values.get("targetAmount")),
+              savedAmount: parseNonnegativeAmount(savedValue),
+              targetDate: String(values.get("targetDate") || ""),
+              accountId: String(values.get("accountId") || ""),
+              notes: String(values.get("notes") || "").trim(),
+              createdAt: id ? item.createdAt : Date.now(),
+              updatedAt: Date.now(),
+            };
+            if (record.targetDate && !validDate(record.targetDate)) throw Error("Choose a valid target date.");
+            if (id) await db.put("goals", record);
+            else await db.add("goals", record);
+            closeModal();
+            await refresh();
+            toast(id ? "Goal updated." : "Goal added.");
+          } catch (error) {
+            showError(error.message);
+            button.disabled = false;
+          }
+        };
+      }
+      function loanModal(id) {
+        const item = state.loans.find((row) => row.id === id) || {
+          name: "",
+          direction: "borrowed",
+          principal: "",
+          outstanding: "",
+          interestRate: 0,
+          dueDate: "",
+          accountId: "",
+          notes: "",
+        };
+        openModal(
+          id ? "Edit loan" : "Add loan",
+          "Track money you borrowed or lent. This does not create a transaction.",
+          `<form class="modal-form" id="loan-form"><label class="field">Loan name<input name="name" required maxlength="60" value="${esc(item.name)}" placeholder="e.g. Vehicle loan"></label><div class="form-grid"><label class="field">Direction<select name="direction"><option value="borrowed" ${item.direction === "borrowed" ? "selected" : ""}>I borrowed</option><option value="lent" ${item.direction === "lent" ? "selected" : ""}>I lent</option></select></label><label class="field">Interest rate (%)<input name="interestRate" required inputmode="decimal" value="${(item.interestRate / 100).toFixed(2)}"></label></div><div class="form-grid"><label class="field">Original principal (₹)<input name="principal" required inputmode="decimal" value="${id ? (item.principal / 100).toFixed(2) : ""}"></label><label class="field">Outstanding (₹)<input name="outstanding" required inputmode="decimal" value="${id ? (item.outstanding / 100).toFixed(2) : ""}"></label></div><div class="form-grid"><label class="field">Due date <small>Optional</small><input name="dueDate" type="date" value="${esc(item.dueDate)}"></label><label class="field">Linked account <small>Optional</small><select name="accountId"><option value="">No linked account</option>${state.accounts.map((account) => `<option value="${account.id}" ${account.id === item.accountId ? "selected" : ""}>${esc(account.name)}</option>`).join("")}</select></label></div><label class="field">Notes <small>Optional</small><textarea name="notes" maxlength="500">${esc(item.notes)}</textarea></label><div class="form-error"></div><div class="modal-foot"><button type="button" class="btn btn-outline" data-action="close-modal">Cancel</button><button class="btn btn-primary">${id ? "Save changes" : "Add loan"}</button></div></form>`,
+        );
+        $("#loan-form").onsubmit = async (event) => {
+          event.preventDefault();
+          const values = new FormData(event.target);
+          const button = event.target.querySelector(".btn-primary");
+          button.disabled = true;
+          try {
+            const outstandingValue = String(values.get("outstanding") || "");
+            const rateValue = String(values.get("interestRate") || "").trim();
+            if (!/^\d+(\.\d{1,2})?$/.test(rateValue)) throw Error("Enter a valid interest rate with up to two decimals.");
+            const interestRate = Math.round(Number(rateValue) * 100);
+            if (!Number.isSafeInteger(interestRate) || interestRate > 100000) throw Error("Interest rate must be between 0% and 1,000%.");
+            const record = {
+              id: id || uid(),
+              name: String(values.get("name") || "").trim(),
+              direction: String(values.get("direction")),
+              principal: parseAmount(values.get("principal")),
+              outstanding: parseNonnegativeAmount(outstandingValue),
+              interestRate,
+              dueDate: String(values.get("dueDate") || ""),
+              accountId: String(values.get("accountId") || ""),
+              notes: String(values.get("notes") || "").trim(),
+              createdAt: id ? item.createdAt : Date.now(),
+              updatedAt: Date.now(),
+            };
+            if (record.dueDate && !validDate(record.dueDate)) throw Error("Choose a valid due date.");
+            if (id) await db.put("loans", record);
+            else await db.add("loans", record);
+            closeModal();
+            await refresh();
+            toast(id ? "Loan updated." : "Loan added.");
+          } catch (error) {
+            showError(error.message);
+            button.disabled = false;
           }
         };
       }
@@ -2670,6 +3213,154 @@ try {
         a.click();
         setTimeout(() => URL.revokeObjectURL(a.href), 500);
       }
+      function addVerifiedEmail() {
+        openModal(
+          "Add verified email",
+          "A six-digit verification code will be sent to this address.",
+          `<form class="modal-form" id="email-form"><label class="field">Email<input name="email" type="email" required maxlength="254" autocomplete="email" placeholder="you@example.com"></label><div class="form-error"></div><div class="modal-foot"><button type="button" class="btn btn-outline" data-action="close-modal">Cancel</button><button class="btn btn-primary">Send code</button></div></form>`,
+        );
+        $("#email-form").onsubmit = async (event) => {
+          event.preventDefault();
+          const button = event.target.querySelector(".btn-primary");
+          button.disabled = true;
+          try {
+            const started = await db.auth("email_begin", {
+              email: String(new FormData(event.target).get("email") || ""),
+            });
+            openModal(
+              "Verify your email",
+              `Enter the code sent to ${started.email}.`,
+              `<form class="modal-form" id="email-code-form"><label class="field">Six-digit code<input name="code" required inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" placeholder="123456"></label><div class="form-error"></div><div class="modal-foot"><button type="button" class="btn btn-outline" data-action="close-modal">Cancel</button><button class="btn btn-primary">Verify</button></div></form>`,
+            );
+            $("#email-code-form").onsubmit = async (codeEvent) => {
+              codeEvent.preventDefault();
+              const verifyButton = codeEvent.target.querySelector(".btn-primary");
+              verifyButton.disabled = true;
+              try {
+                const verified = await db.auth("email_confirm", {
+                  challenge: started.challenge,
+                  code: String(
+                    new FormData(codeEvent.target).get("code") || "",
+                  ),
+                });
+                state.user.email = verified.email;
+                state.user.emailVerified = true;
+                closeModal();
+                render();
+                toast("Email verified.");
+              } catch (error) {
+                showError(error.message);
+                verifyButton.disabled = false;
+              }
+            };
+          } catch (error) {
+            showError(error.message);
+            button.disabled = false;
+          }
+        };
+      }
+      function changePassword() {
+        openModal(
+          "Change password",
+          "Your other signed-in sessions will be ended.",
+          `<form class="modal-form" id="password-form"><label class="field">Current password<input name="currentPassword" type="password" required maxlength="128" autocomplete="current-password"></label><label class="field">New password<input name="newPassword" type="password" required minlength="10" maxlength="128" autocomplete="new-password" placeholder="At least 10 characters"></label><label class="field">Confirm new password<input name="confirmPassword" type="password" required minlength="10" maxlength="128" autocomplete="new-password"></label><div class="form-error"></div><div class="modal-foot"><button type="button" class="btn btn-outline" data-action="close-modal">Cancel</button><button class="btn btn-primary">Change password</button></div></form>`,
+        );
+        $("#password-form").onsubmit = async (event) => {
+          event.preventDefault();
+          const values = new FormData(event.target);
+          const newPassword = String(values.get("newPassword") || "");
+          if (newPassword !== String(values.get("confirmPassword") || "")) {
+            return showError("Passwords do not match.");
+          }
+          const button = event.target.querySelector(".btn-primary");
+          button.disabled = true;
+          try {
+            await db.auth("password_change", {
+              currentPassword: String(values.get("currentPassword") || ""),
+              newPassword,
+            });
+            closeModal();
+            toast("Password changed. Other sessions were signed out.");
+          } catch (error) {
+            showError(error.message);
+            button.disabled = false;
+          }
+        };
+      }
+      function setupTotp() {
+        const replacing = Boolean(state.user?.totpEnabled);
+        openModal(
+          replacing ? "Re-enroll authenticator" : "Enable authenticator app",
+          "Confirm your password before generating a new setup key.",
+          `<form class="modal-form" id="totp-password-form"><label class="field">Current password<input name="currentPassword" type="password" required maxlength="128" autocomplete="current-password"></label><div class="form-error"></div><div class="modal-foot"><button type="button" class="btn btn-outline" data-action="close-modal">Cancel</button><button class="btn btn-primary">Continue</button></div></form>`,
+        );
+        $("#totp-password-form").onsubmit = async (passwordEvent) => {
+          passwordEvent.preventDefault();
+          const button = passwordEvent.target.querySelector(".btn-primary");
+          button.disabled = true;
+          try {
+            const setup = await db.auth("totp_begin", {
+              currentPassword: String(
+                new FormData(passwordEvent.target).get("currentPassword") || "",
+              ),
+            });
+            openModal(
+              replacing ? "Scan the new QR code" : "Scan the QR code",
+              "Use Google Authenticator, Microsoft Authenticator, Authy, or another TOTP app.",
+              `<form class="modal-form" id="totp-form"><div class="qr-setup"><img src="${esc(setup.qrDataUrl)}" width="240" height="240" alt="Authenticator setup QR code"><div class="notice"><strong>Manual setup key</strong><code>${esc(setup.secret)}</code></div></div><label class="field">Six-digit code<input name="code" required inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" placeholder="123456"></label><div class="form-error"></div><div class="modal-foot"><button type="button" class="btn btn-outline" data-action="close-modal">Cancel</button><button class="btn btn-primary">Confirm ${replacing ? "new authenticator" : "and enable"}</button></div></form>`,
+            );
+            $("#totp-form").onsubmit = async (event) => {
+              event.preventDefault();
+              const confirmButton = event.target.querySelector(".btn-primary");
+              confirmButton.disabled = true;
+              try {
+                const result = await db.auth("totp_confirm", {
+                  code: String(new FormData(event.target).get("code") || ""),
+                });
+                state.user.totpEnabled = true;
+                openModal(
+                  "Save your recovery codes",
+                  "These replace any previous recovery codes. Each works once.",
+                  `<div class="notice"><code style="white-space:pre-wrap;font-size:16px;line-height:1.8">${result.backupCodes.map(esc).join("\n")}</code></div><div class="modal-foot"><button class="btn btn-primary" data-action="close-modal">I saved them</button></div>`,
+                );
+                render();
+              } catch (error) {
+                showError(error.message);
+                confirmButton.disabled = false;
+              }
+            };
+          } catch (error) {
+            showError(error.message);
+            button.disabled = false;
+          }
+        };
+      }
+      function disableTotp() {
+        openModal(
+          "Disable authenticator verification?",
+          "Confirm with your password and a current authenticator or recovery code.",
+          `<form class="modal-form" id="disable-totp-form"><label class="field">Current password<input name="currentPassword" type="password" required maxlength="128" autocomplete="current-password"></label><label class="field">Authenticator or recovery code<input name="code" required maxlength="11" autocomplete="one-time-code" placeholder="123456 or recovery code"></label><div class="form-error"></div><div class="modal-foot"><button type="button" class="btn btn-outline" data-action="close-modal">Cancel</button><button class="btn btn-danger">Disable 2FA</button></div></form>`,
+        );
+        $("#disable-totp-form").onsubmit = async (event) => {
+          event.preventDefault();
+          const values = new FormData(event.target);
+          const button = event.target.querySelector(".btn-danger");
+          button.disabled = true;
+          try {
+            await db.auth("totp_disable", {
+              currentPassword: String(values.get("currentPassword") || ""),
+              code: String(values.get("code") || "").trim(),
+            });
+            state.user.totpEnabled = false;
+            closeModal();
+            render();
+            toast("Authenticator verification disabled.");
+          } catch (error) {
+            showError(error.message);
+            button.disabled = false;
+          }
+        };
+      }
       async function handle(action, id, el) {
         if (action === "add-tx") txModal();
         if (action === "edit-tx") txModal(id);
@@ -2682,11 +3373,45 @@ try {
           await db.auth("logout");
           location.reload();
         }
+        if (action === "change-password") changePassword();
+        if (action === "setup-totp") setupTotp();
+        if (action === "disable-totp") disableTotp();
+        if (action === "add-email") addVerifiedEmail();
         if (action === "add-account") accountModal();
         if (action === "edit-account") accountModal(id);
         if (action === "add-category") categoryModal();
         if (action === "edit-category") categoryModal(el.dataset.name);
+        if (action === "plan-tab") {
+          state.planTab = id;
+          render();
+        }
+        if (action === "add-budgets") budgetModal();
+        if (action === "edit-budget") budgetModal(id);
+        if (action === "add-recurring") recurringModal();
+        if (action === "edit-recurring") recurringModal(id);
+        if (action === "add-goals") goalModal();
+        if (action === "edit-goal") goalModal(id);
+        if (action === "add-loans") loanModal();
+        if (action === "edit-loan") loanModal(id);
         if (action === "close-modal") closeModal();
+        const planningDelete = {
+          "delete-budget": ["budgets", "Budget"],
+          "delete-recurring": ["recurring", "Recurring entry"],
+          "delete-goal": ["goals", "Goal"],
+          "delete-loan": ["loans", "Loan"],
+        }[action];
+        if (planningDelete) {
+          const [collection, label] = planningDelete;
+          confirmModal(
+            `Delete ${label.toLowerCase()}?`,
+            `${label} will be permanently removed. Existing transactions are not changed.`,
+            `Delete ${label.toLowerCase()}`,
+            async () => {
+              await db.del(collection, id);
+              toast(`${label} deleted.`);
+            },
+          );
+        }
         if (action === "delete-tx") {
           const t = state.transactions.find((x) => x.id === id);
           confirmModal(
@@ -2718,9 +3443,11 @@ try {
         }
         if (action === "delete-category") {
           const name = el.dataset.name,
-            count = state.transactions.filter(
-              (t) => t.category === name,
-            ).length;
+            count = [
+              ...state.transactions,
+              ...state.recurring,
+              ...state.budgets,
+            ].filter((t) => t.category === name).length;
           if (count)
             return toast(
               `This category is used by ${count} transaction${count === 1 ? "" : "s"}. Rename it instead.`,
@@ -2763,11 +3490,15 @@ try {
             JSON.stringify(
               {
                 format: "paisa-backup",
-                version: 1,
+                version: 2,
                 exportedAt: new Date().toISOString(),
                 accounts: state.accounts,
                 transactions: state.transactions,
                 categories: state.categories,
+                budgets: state.budgets,
+                recurring: state.recurring,
+                goals: state.goals,
+                loans: state.loans,
               },
               null,
               2,
@@ -2780,11 +3511,15 @@ try {
         if (action === "reset")
           confirmModal(
             "Delete all cloud data?",
-            "This removes every account, transaction and custom category from the online database. Download a backup first if you may need it.",
+            "This removes every financial and planning record from the database. Download a backup first if you may need it.",
             "Delete everything",
             async () => {
               await db.clear("transactions");
               await db.clear("categories");
+              await db.clear("budgets");
+              await db.clear("recurring");
+              await db.clear("goals");
+              await db.clear("loans");
               await db.clear("accounts");
               toast("Cloud data reset.");
             },
@@ -2859,12 +3594,16 @@ try {
           const d = JSON.parse(await file.text());
           if (
             d.format !== "paisa-backup" ||
-            d.version !== 1 ||
+            ![1, 2].includes(d.version) ||
             !Array.isArray(d.accounts) ||
             !Array.isArray(d.transactions) ||
             !Array.isArray(d.categories)
           )
             throw Error("This is not a valid Paisa backup.");
+          d.budgets ||= [];
+          d.recurring ||= [];
+          d.goals ||= [];
+          d.loans ||= [];
           for (const a of d.accounts) {
             if (!a.id || !a.name || !Number.isSafeInteger(a.opening))
               throw Error("The backup contains an invalid account.");

@@ -2,6 +2,10 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { test } from "node:test";
 import {
+  validateBudget,
+  validateGoal,
+  validateLoan,
+  validateRecurring,
   transactionFingerprint,
   validateAccount,
   validateTransaction,
@@ -81,6 +85,9 @@ test("client provides registration, login and logout without an access key", asy
     "utf8",
   );
   assert.match(html, /Create account/);
+  assert.match(html, /name="email" type="email"/);
+  assert.match(html, /verify_registration/);
+  assert.match(html, /totp_begin/);
   assert.match(html, /autocomplete="username"/);
   assert.match(html, /current-password/);
   assert.match(html, /data-action="logout"/);
@@ -88,4 +95,120 @@ test("client provides registration, login and logout without an access key", asy
     html,
     /Workspace access key|X-Paisa-Key|paisa_access_key/,
   );
+});
+
+test("new accounts use POST while existing accounts use PUT", async () => {
+  const html = await readFile(
+    new URL("../public/index.html", import.meta.url),
+    "utf8",
+  );
+  assert.match(html, /if \(id\) await db\.put\("accounts", record\)/);
+  assert.match(html, /else await db\.add\("accounts", record\)/);
+});
+
+test("dashboard selects the latest populated month and removed cloud slogans", async () => {
+  const html = await readFile(
+    new URL("../public/index.html", import.meta.url),
+    "utf8",
+  );
+  assert.match(html, /selectedMonthHasData/);
+  assert.match(html, /state\.month = latestMonth/);
+  for (const phrase of [
+    "Private workspace · Cloud-synced data",
+    "Online · cloud database",
+    "Stored securely online",
+    "Available across your devices",
+  ]) {
+    assert.equal(html.includes(phrase), false);
+  }
+});
+
+test("planning records validate money, dates, account links and schedules", () => {
+  assert.equal(
+    validateBudget({
+      id: "budget_1",
+      name: "Food cap",
+      category: "Food",
+      amount: 200000,
+      month: "2026-10",
+      createdAt: 1,
+    }).amount,
+    200000,
+  );
+  assert.equal(
+    validateRecurring({
+      id: "recurring_1",
+      name: "Rent",
+      type: "expense",
+      amount: 1800000,
+      category: "Rent",
+      accountId: "account_1",
+      paymentType: "Bank/Cheque",
+      description: "Monthly rent",
+      frequency: "monthly",
+      nextDate: "2026-10-05",
+      active: true,
+      createdAt: 1,
+    }).frequency,
+    "monthly",
+  );
+  assert.equal(
+    validateGoal({
+      id: "goal_1",
+      name: "Emergency fund",
+      targetAmount: 5000000,
+      savedAmount: 1000000,
+      targetDate: "2027-12-31",
+      accountId: "",
+      createdAt: 1,
+    }).savedAmount,
+    1000000,
+  );
+  assert.equal(
+    validateLoan({
+      id: "loan_1",
+      name: "Vehicle loan",
+      direction: "borrowed",
+      principal: 10000000,
+      outstanding: 7000000,
+      interestRate: 850,
+      dueDate: "2029-01-01",
+      accountId: "account_1",
+      createdAt: 1,
+    }).interestRate,
+    850,
+  );
+  assert.throws(
+    () =>
+      validateRecurring({
+        id: "recurring_1",
+        name: "Bad schedule",
+        type: "expense",
+        amount: 100,
+        category: "Other",
+        accountId: "account_1",
+        frequency: "daily",
+        nextDate: "2026-10-01",
+      }),
+    /Frequency is invalid/,
+  );
+});
+
+test("client includes password recovery, QR-based 2FA management and planning", async () => {
+  const html = await readFile(
+    new URL("../public/index.html", import.meta.url),
+    "utf8",
+  );
+  for (const value of [
+    "password_reset_begin",
+    "password_reset_confirm",
+    "password_change",
+    "totp_disable",
+    "qrDataUrl",
+    '["planning", "Planning"]',
+    "Add recurring entry",
+    "Add savings goal",
+  ]) {
+    assert.match(html, new RegExp(value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+  }
 });

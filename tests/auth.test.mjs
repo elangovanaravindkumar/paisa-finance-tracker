@@ -61,5 +61,11 @@ test("authenticated user comes only from the server-side session lookup", async 
   const user = await currentUser(sql, {
     headers: { cookie: "paisa_session=raw-browser-token" },
   });
-  assert.deepEqual(user, { id: "user-a", username: "anita" });
+  assert.deepEqual(user, {
+    id: "user-a",
+    username: "anita",
+    email: null,
+    emailVerified: false,
+    totpEnabled: false,
+  });
 });
